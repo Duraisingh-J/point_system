@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:point_system/screens/items_screen.dart';
 import 'package:point_system/screens/tab_screen.dart';
 
-final kColorScheme = ColorScheme.fromSeed(seedColor: Colors.grey, );
+final kColorScheme = ColorScheme.fromSeed(seedColor: Colors.blueGrey, brightness: Brightness.light);
 
 void main() {
   runApp(MaterialApp(
