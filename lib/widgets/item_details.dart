@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:point_system/datamodel/item.dart';
+import 'package:point_system/widgets/update_item.dart';
 
 class ItemDetails extends StatefulWidget {
   final Item item;
@@ -134,9 +135,15 @@ class _ItemDetailsState extends State<ItemDetails> {
               ),
             )
           : ListTile(
-            onLongPress: () {
-                showDialog(context: context, builder: )
-            },
+              onLongPress: () {
+                showDialog(
+                  context: context,
+                  builder: (ctx) {
+                    return UpdateItem(widget.item);
+                  },
+
+                );
+              },
               onTap: () {
                 setState(() {
                   isTapped = true;

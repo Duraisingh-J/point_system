@@ -40,7 +40,12 @@ class _AddItemScreenState extends State<AddItemScreen> {
     setState(() {
       isAdding = true;
     });
-
+    final newItem = Item(
+      title: name,
+      retailPrice: price,
+      quantity: _selectedQuantity,
+    );
+    
     final url = Uri.https(
       'pointsystem-accbd-default-rtdb.asia-southeast1.firebasedatabase.app',
       'items.json',
@@ -49,6 +54,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
       url,
       headers: {'Content-Type': 'application/json'},
       body: json.encode({
+        'id': newItem.id,
         'title': name,
         'retailPrice': price,
         'quantity': _selectedQuantity.name,
@@ -56,7 +62,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
     );
     print(response.body);
     Fluttertoast.showToast(
-      msg: '$name added successfully!',
+      msg: '${name} added successfully!',
       toastLength: Toast.LENGTH_SHORT,
     );
     if (!context.mounted) {
