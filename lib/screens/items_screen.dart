@@ -54,16 +54,16 @@ class _ItemsScreenState extends State<ItemsScreen> {
   }
 
   void _addItem() async {
-    final _newItem = await Navigator.of(
+    final newItem = await Navigator.of(
       context,
     ).push(MaterialPageRoute(builder: (ctx) => AddItemScreen()));
 
-    if (_newItem == null) {
+    if (newItem == null) {
       return;
     }
 
     setState(() {
-      items.add(_newItem);
+      items.add(newItem);
     });
   }
 

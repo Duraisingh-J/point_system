@@ -56,7 +56,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
     );
     print(response.body);
     Fluttertoast.showToast(
-      msg: '${name} added successfully!',
+      msg: '$name added successfully!',
       toastLength: Toast.LENGTH_SHORT,
     );
     if (!context.mounted) {
