@@ -1,7 +1,5 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:point_system/datamodel/item.dart';
 import 'package:point_system/provider/items_provider.dart';
 import 'package:point_system/screens/add_item_screen.dart';
 import 'package:point_system/screens/search_screen.dart';

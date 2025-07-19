@@ -98,7 +98,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                   Row(
                     children: [
                       Text(
-                        'Rs. ${widget.item.retailPrice.toDouble() * (double.tryParse(_quantityController.text) ?? 0.0)}',
+                        '₹${widget.item.retailPrice.toDouble() * (double.tryParse(_quantityController.text) ?? 0.0)}',
                         style: const TextStyle(
                           fontSize: 18,
                           color: Colors.blueGrey,
@@ -106,6 +106,24 @@ class _ItemDetailsState extends State<ItemDetails> {
                         ),
                       ),
                       const Spacer(),
+                      TextButton(
+                        onPressed: () {
+                          setState(() {
+                            isTapped = false;
+                          });
+                        },
+                        style: TextButton.styleFrom(
+                        foregroundColor: Colors.red,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        textStyle: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                        child: const Text('Cancel'),
+                      ),
+                      SizedBox(width: 10),
                       ElevatedButton(
                         onPressed: () {
                           setState(() {
@@ -141,7 +159,6 @@ class _ItemDetailsState extends State<ItemDetails> {
                   builder: (ctx) {
                     return UpdateItem(widget.item);
                   },
-
                 );
               },
               onTap: () {

@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:point_system/provider/items_provider.dart';
 
-class SearchScreen extends StatefulWidget {
+class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({super.key});
 
   @override
-  State<SearchScreen> createState() => _SearchScreenState();
+  ConsumerState<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class _SearchScreenState extends ConsumerState<SearchScreen> {
   final _itemController = TextEditingController();
- // List<String> _items = [];
+  List<String> _items = [];
 
   @override
   void initState() {
     super.initState();
+    
     _itemController.addListener(_itemsToDisplay);
   }
 
@@ -24,7 +27,8 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   void _itemsToDisplay() {
-    print('Searching for: ${_itemController.text}');
+    final query = _itemController.text.trim().toLowerCase();
+    ref.read(itemsProvider.notifier).searchItems(query);
   }
 
   @override
@@ -45,6 +49,15 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
               ),
               hintText: 'Type to search....',
+              suffixIcon: _itemController.text.isNotEmpty
+                  ? IconButton(
+                      icon: Icon(Icons.clear),
+                      onPressed: () {
+                        _itemController.clear();
+                        ref.read(itemsProvider.notifier).searchItems('');
+                      },
+                    )
+                  : null,
             ),
           ),
         );

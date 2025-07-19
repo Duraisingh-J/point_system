@@ -49,7 +49,7 @@ class _OverallAmountState extends State<OverallAmount> {
                 SizedBox(height: 5),
                 Align(
                   alignment: Alignment.center,
-                  child: Text('Rs. xxxxx', style: TextStyle(fontSize: 25)),
+                  child: Text('₹ xxxxx', style: TextStyle(fontSize: 25)),
                 ),
                 SizedBox(height: 7),
                 Divider(color: Colors.black, thickness: 1),
@@ -59,7 +59,7 @@ class _OverallAmountState extends State<OverallAmount> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Income : Rs. xxxx',
+                        'Income : ₹ xxxx',
                         style: TextStyle(fontSize: 15, color: Colors.green),
                       ),
                     ),
@@ -67,7 +67,7 @@ class _OverallAmountState extends State<OverallAmount> {
                     Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        'Pending : Rs. xxx',
+                        'Pending : ₹ xxxx',
                         style: TextStyle(fontSize: 15, color: Colors.red),
                       ),
                     ),

@@ -118,7 +118,7 @@ class _UpdateItemState extends State<UpdateItem> {
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       labelText: 'Retail Price',
-                      prefixText: 'Rs. ',
+                      prefixText: '₹',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),

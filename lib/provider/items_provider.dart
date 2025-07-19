@@ -8,44 +8,10 @@ class ItemsProvider extends AutoDisposeNotifier<List<Item>?> {
   late final DatabaseReference _ref;
   late final StreamSubscription<DatabaseEvent> _subscription;
 
+  List<Item> allitems = [];
+
   bool _isLoading = true;
   bool get isLoading => _isLoading;
-
-  // @override
-  // List<Item>? build() {
-  //   _ref = FirebaseDatabase.instance.ref('items');
-  //   _fetchItems();
-  //   _listenToUpdates();
-
-  //   ref.onDispose(() {
-  //     _subscription.cancel();
-  //   });
-
-  //   return null;
-  // }
-
-  // void _fetchItems() async {
-  //   final snapshot = await _ref.get();
-  //   final data = snapshot.value as Map<String, dynamic>?;
-  //   if (data != null) {
-  //     final items = data.entries.map((e) {
-  //       final itemData = Map<String, dynamic>.from(e.value);
-  //       return Item(
-  //         id: e.key,
-  //         title: itemData['title'] ?? '',
-  //         retailPrice: (itemData['retailPrice'] ?? 0).toDouble(),
-  //         quantity: Quantity.values.firstWhere(
-  //           (q) => q.name == itemData['quantity'],
-  //           orElse: () => Quantity.kg,
-  //         ),
-  //       );
-  //     }).toList();
-  //     state = items;
-  //     _isLoading = false;
-  //   } else {
-  //     state = [];
-  //   }
-  // }
 
   @override
   List<Item>? build() {
@@ -75,9 +41,10 @@ class ItemsProvider extends AutoDisposeNotifier<List<Item>?> {
         ),
       );
     }).toList();
+    allitems = items;
     state = items;
     _isLoading = false;
-    }
+  }
 
   void _listenToUpdates() {
     _subscription = _ref.onValue.listen((event) {
@@ -94,8 +61,9 @@ class ItemsProvider extends AutoDisposeNotifier<List<Item>?> {
           ),
         );
       }).toList();
+      allitems = items;
       state = items;
-        });
+    });
   }
 
   void addItem(Item newItem) {
@@ -106,6 +74,20 @@ class ItemsProvider extends AutoDisposeNotifier<List<Item>?> {
       'retailPrice': newItem.retailPrice,
       'quantity': newItem.quantity.name,
     });
+  }
+
+  void searchItems(String query) {
+    if (query.isEmpty) {
+      state = allitems;
+      return;
+    } else {
+       final filteredItems = allitems.where((item) {
+      return item.title.toLowerCase().contains(query.toLowerCase());
+    }).toList();
+    state = filteredItems;
+
+    }
+
   }
 }
 
