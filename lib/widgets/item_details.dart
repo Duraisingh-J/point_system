@@ -43,7 +43,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    'Price: Rs. ${widget.item.retailPrice}/${widget.item.quantity.name}',
+                    'Price: ₹${widget.item.retailPrice}/${widget.item.quantity.name}',
                     style: const TextStyle(fontSize: 15, color: Colors.black54),
                   ),
                   const SizedBox(height: 10),
@@ -157,7 +157,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                 ),
               ),
               subtitle: Text(
-                'Price: Rs. ${widget.item.retailPrice}',
+                'Price: ₹${widget.item.retailPrice}',
                 style: const TextStyle(fontSize: 15, color: Colors.black54),
               ),
             ),

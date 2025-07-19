@@ -16,13 +16,13 @@ class ItemsScreen extends ConsumerStatefulWidget {
 }
 
 class _ItemsScreenState extends ConsumerState<ItemsScreen> {
-  List<Item> items = [];
+  
   @override
   void initState() {
     super.initState();
-    if(ref.read(itemsProvider).isEmpty) {
-      ref.read(itemsProvider.notifier).fetchItems();
-    }
+
+      ref.read(itemsProvider.notifier);
+    
   }
 
   void _addItem() {
@@ -33,14 +33,16 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    items = ref.watch(itemsProvider);
-    Widget content = items.isEmpty
-        ? const Center(
-            child: Text('No items found', style: TextStyle(fontSize: 20)),
-          )
-        : ItemList(items: items);
-    if (ref.watch(itemsProvider.notifier).isLoading) {
+    final items = ref.watch(itemsProvider);
+    Widget content;
+    if (items == null) {
       content = const Center(child: CircularProgressIndicator());
+    } else if (items.isEmpty) {
+      content = const Center(
+        child: Text('No items found', style: TextStyle(fontSize: 20)),
+      );
+    } else {
+      content = ItemList(items: items);
     }
     return Scaffold(
       appBar: AppBar(
