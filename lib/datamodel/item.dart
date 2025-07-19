@@ -11,6 +11,13 @@ class Item {
   final Quantity quantity;
 
   Item({
+    required this.id,
+    required this.title,
+    required this.retailPrice,
+    required this.quantity,
+  });
+  
+  Item.create({
     required this.title,
     required this.retailPrice,
     required this.quantity,

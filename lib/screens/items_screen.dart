@@ -1,74 +1,47 @@
-import 'dart:convert';
-
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:point_system/datamodel/item.dart';
+import 'package:point_system/provider/items_provider.dart';
 import 'package:point_system/screens/add_item_screen.dart';
 import 'package:point_system/screens/search_screen.dart';
 import 'package:point_system/widgets/item_list.dart';
 import 'package:point_system/widgets/overall_amount.dart';
-import 'package:http/http.dart' as http;
 
-class ItemsScreen extends StatefulWidget {
+class ItemsScreen extends ConsumerStatefulWidget {
   const ItemsScreen({super.key});
 
   @override
-  State<ItemsScreen> createState() => _ItemsScreenState();
+  ConsumerState<ItemsScreen> createState() => _ItemsScreenState();
 }
 
-class _ItemsScreenState extends State<ItemsScreen> {
+class _ItemsScreenState extends ConsumerState<ItemsScreen> {
   List<Item> items = [];
-  late Future<List<Item>> itemsFuture;
-
   @override
   void initState() {
     super.initState();
-    itemsFuture = _fetchItems();
+    if(ref.read(itemsProvider).isEmpty) {
+      ref.read(itemsProvider.notifier).fetchItems();
+    }
   }
 
-  Future<List<Item>> _fetchItems() async {
-    final url = Uri.https(
-      'pointsystem-accbd-default-rtdb.asia-southeast1.firebasedatabase.app',
-      'items.json',
-    );
-    final response = await http.get(url);
-
-    if (response.body == 'null') {
-      return [];
-    }
-
-    final Map<String, dynamic> itemData = json.decode(response.body);
-
-    final List<Item> loadedItems = [];
-    for (final item in itemData.entries) {
-      loadedItems.add(
-        Item(
-          title: item.value['title'],
-          retailPrice: item.value['retailPrice'],
-          quantity: Quantity.values.firstWhere(
-            (quantity) => quantity.name == item.value['quantity'],
-          ),
-        ),
-      );
-    }
-    return loadedItems;
-  }
-
-  void _addItem() async {
-    final newItem = await Navigator.of(
+  void _addItem() {
+    Navigator.of(
       context,
     ).push(MaterialPageRoute(builder: (ctx) => AddItemScreen()));
-
-    if (newItem == null) {
-      return;
-    }
-
-    setState(() {
-      items.add(newItem);
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+    items = ref.watch(itemsProvider);
+    Widget content = items.isEmpty
+        ? const Center(
+            child: Text('No items found', style: TextStyle(fontSize: 20)),
+          )
+        : ItemList(items: items);
+    if (ref.watch(itemsProvider.notifier).isLoading) {
+      content = const Center(child: CircularProgressIndicator());
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -85,23 +58,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
               const SizedBox(height: 10),
               SearchScreen(),
               SizedBox(height: 10),
-              Expanded(
-                child: FutureBuilder(
-                  future: itemsFuture,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                    if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    }
-                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return Center(child: Text('No items found.'));
-                    }
-                    return ItemList(items: snapshot.data!);
-                  },
-                ),
-              ),
+              Expanded(child: content),
             ],
           ),
         ),

@@ -1,7 +1,7 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:point_system/datamodel/item.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+
 
 class UpdateItem extends StatefulWidget {
   final Item item;
@@ -16,6 +16,7 @@ class _UpdateItemState extends State<UpdateItem> {
   late TextEditingController _priceController;
   late Quantity _selectedQuantity;
   bool isUpdating = false;
+  
 
   @override
   void initState() {
@@ -54,22 +55,15 @@ class _UpdateItemState extends State<UpdateItem> {
       if (widget.item.id.isEmpty) {
         throw Exception('Item ID is missing');
       }
-      
-      final url = Uri.https(
-        'pointsystem-accbd-default-rtdb.asia-southeast1.firebasedatabase.app',
-        'items/${widget.item.id}.json',
-      );
-      final response = await http.patch(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          'title': name,
-          'retailPrice': price,
-          'quantity': _selectedQuantity.name,
-        }),
-      );
+     final DatabaseReference ref = FirebaseDatabase.instance.ref('items/${widget.item.id}');
+     
+      await ref.update({
+        'title': name,
+        'retailPrice': price,
+        'quantity': _selectedQuantity.name,
+      });
 
-      if (response.statusCode == 200) {
+      if (mounted) {
         if (!context.mounted) return;
         ScaffoldMessenger.of(
           context,

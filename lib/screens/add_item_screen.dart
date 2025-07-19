@@ -1,18 +1,21 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:point_system/datamodel/item.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:http/http.dart' as http;
+import 'package:point_system/provider/items_provider.dart';
 
-class AddItemScreen extends StatefulWidget {
+class AddItemScreen extends ConsumerStatefulWidget {
   const AddItemScreen({super.key});
 
   @override
-  State<AddItemScreen> createState() => _AddItemScreenState();
+  ConsumerState<AddItemScreen> createState() => _AddItemScreenState();
 }
 
-class _AddItemScreenState extends State<AddItemScreen> {
+class _AddItemScreenState extends ConsumerState<AddItemScreen> {
   bool isAdding = false;
   final _nameController = TextEditingController();
   final _priceController = TextEditingController();
@@ -21,7 +24,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
   void _addItem() async {
     final String name = _nameController.text.trim();
     final String priceText = _priceController.text.trim();
-
+   
     if (name.isEmpty || priceText.isEmpty) {
       Fluttertoast.showToast(
         msg: 'Fill the fields',
@@ -40,29 +43,15 @@ class _AddItemScreenState extends State<AddItemScreen> {
     setState(() {
       isAdding = true;
     });
-    final newItem = Item(
+    final newItem = Item.create(
       title: name,
       retailPrice: price,
       quantity: _selectedQuantity,
     );
-    
-    final url = Uri.https(
-      'pointsystem-accbd-default-rtdb.asia-southeast1.firebasedatabase.app',
-      'items.json',
-    );
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode({
-        'id': newItem.id,
-        'title': name,
-        'retailPrice': price,
-        'quantity': _selectedQuantity.name,
-      }),
-    );
-    print(response.body);
+
+    ref.read(itemsProvider.notifier).addItem(newItem);
     Fluttertoast.showToast(
-      msg: '${name} added successfully!',
+      msg: '$name added successfully!',
       toastLength: Toast.LENGTH_SHORT,
     );
     if (!context.mounted) {
