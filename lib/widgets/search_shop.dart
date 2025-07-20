@@ -1,33 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:point_system/provider/items_provider.dart';
 
-class SearchScreen extends ConsumerStatefulWidget {
-  const SearchScreen({super.key});
+class SearchShop extends ConsumerStatefulWidget {
+  const SearchShop({super.key});
 
   @override
-  ConsumerState<SearchScreen> createState() => _SearchScreenState();
+  ConsumerState<SearchShop> createState() => _SearchShopState();
 }
 
-class _SearchScreenState extends ConsumerState<SearchScreen> {
-  final _itemController = TextEditingController();
+class _SearchShopState extends ConsumerState<SearchShop> {
+  final _shopController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     
-    _itemController.addListener(_itemsToDisplay);
+    _shopController.addListener(_shopsToDisplay);
   }
 
   @override
   void dispose() {
-    _itemController.dispose();
+    _shopController.dispose();
     super.dispose();
   }
 
-  void _itemsToDisplay() {
-    final query = _itemController.text.trim().toLowerCase();
-    ref.read(itemsProvider.notifier).searchItems(query);
+  void _shopsToDisplay() {
+    final query = _shopController.text.trim().toLowerCase();
   }
 
   @override
@@ -35,7 +33,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     return Padding(
           padding: const EdgeInsets.fromLTRB(10, 5, 8.0, 10),
           child: TextFormField(
-            controller: _itemController,
+            controller: _shopController,
             decoration: InputDecoration(
               prefixIcon: Icon(
                 Icons.search,
@@ -48,12 +46,12 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 ),
               ),
               hintText: 'Type to search....',
-              suffixIcon: _itemController.text.isNotEmpty
+              suffixIcon: _shopController.text.isNotEmpty
                   ? IconButton(
                       icon: Icon(Icons.clear),
                       onPressed: () {
-                        _itemController.clear();
-                        ref.read(itemsProvider.notifier).searchItems('');
+                        _shopController.clear();
+                       
                         
                       },
                     )

@@ -8,7 +8,9 @@ final kColorScheme = ColorScheme.fromSeed(seedColor: Colors.blueGrey, brightness
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  //debugPaintEnabled = false; // Disable debug paint for production
   runApp(ProviderScope(
+  
     child: MaterialApp(
       theme: ThemeData(
         useMaterial3: true,

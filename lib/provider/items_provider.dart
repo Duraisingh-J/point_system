@@ -11,6 +11,7 @@ class ItemsProvider extends AutoDisposeNotifier<List<Item>?> {
   List<Item> allitems = [];
 
   bool _isLoading = true;
+  
   bool get isLoading => _isLoading;
 
   @override
