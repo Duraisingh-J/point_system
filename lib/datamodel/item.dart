@@ -9,6 +9,8 @@ class Item {
   final String title;
   late final double retailPrice;
   late final double totalPrice;
+  late final String quantityInGrams;
+  late final Quantity selectedQuantity;
   final Quantity quantity;
 
   Item({
@@ -27,7 +29,9 @@ class Item {
   Item.withTotalPrice({
     required this.id,
     required this.title,
+    required this.quantityInGrams,
     required this.retailPrice,
+    required this.selectedQuantity,
     required this.quantity,
     required this.totalPrice, 
   });

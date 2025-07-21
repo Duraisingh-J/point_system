@@ -181,7 +181,7 @@ class _ItemDetailsState extends ConsumerState<ItemDetails> {
                             onPressed: () {
                               setState(() {
                                 isTapped = false;
-                                ref.read(billItemsProvider.notifier).addItem(Item.withTotalPrice(id: widget.item.id, title: widget.item.title, retailPrice: _price, quantity: _selectedQuantity, totalPrice: _price));
+                                ref.read(billItemsProvider.notifier).addItem(Item.withTotalPrice(id: widget.item.id, quantityInGrams: _quantityController.text, title: widget.item.title, retailPrice: widget.item.retailPrice, selectedQuantity: _selectedQuantity, quantity: widget.item.quantity, totalPrice: _price));
                               });
                             },
                             style: ElevatedButton.styleFrom(

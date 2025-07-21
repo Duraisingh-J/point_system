@@ -1,11 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:point_system/datamodel/item.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:http/http.dart' as http;
 import 'package:point_system/provider/items_provider.dart';
 
 class AddItemScreen extends ConsumerStatefulWidget {

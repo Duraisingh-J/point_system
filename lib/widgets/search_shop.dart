@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:point_system/provider/shops_provider.dart';
 
 class SearchShop extends ConsumerStatefulWidget {
   const SearchShop({super.key});
@@ -14,8 +15,9 @@ class _SearchShopState extends ConsumerState<SearchShop> {
   @override
   void initState() {
     super.initState();
-    
-    _shopController.addListener(_shopsToDisplay);
+    _shopController.addListener(() {
+      ref.read(shopsProvider.notifier).searchShop(_shopController.text);
+    });
   }
 
   @override
@@ -24,40 +26,74 @@ class _SearchShopState extends ConsumerState<SearchShop> {
     super.dispose();
   }
 
-  void _shopsToDisplay() {
-    final query = _shopController.text.trim().toLowerCase();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Padding(
-          padding: const EdgeInsets.fromLTRB(10, 5, 8.0, 10),
-          child: TextFormField(
-            controller: _shopController,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.search,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(
+    final shops = ref.watch(shopsProvider);
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 5, 8.0, 10),
+        child: Column(
+          children: [
+            TextFormField(
+              controller: _shopController,
+              decoration: InputDecoration(
+                prefixIcon: Icon(
+                  Icons.search,
                   color: Theme.of(context).colorScheme.primary,
                 ),
+            
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+                hintText: 'Type to search....',
+            
+                suffixIcon: _shopController.text.isNotEmpty
+                    ? IconButton(
+                        icon: Icon(Icons.clear),
+                        onPressed: () {
+                          _shopController.clear();
+                        },
+                      )
+                    : null,
               ),
-              hintText: 'Type to search....',
-              suffixIcon: _shopController.text.isNotEmpty
-                  ? IconButton(
-                      icon: Icon(Icons.clear),
-                      onPressed: () {
-                        _shopController.clear();
-                       
-                        
-                      },
-                    )
-                  : null,
+            
+            ),
+           if (_shopController.text.isNotEmpty) ...[
+      if (shops.isEmpty)
+        Center(
+          child: Text(
+            'No shops found',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurface,
+              fontSize: 16,
             ),
           ),
-        );
+        )
+      else
+        Flexible(
+          child: ListView.builder(
+            itemCount: shops.length,
+            itemBuilder: (context, index) {
+              final shop = shops[index];
+              return Card(
+                child: ListTile(
+                  title: Text(shop.name),
+                  onTap: () {
+                    // Handle shop selection
+                  },
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    
+          ],
+        ),
+      ),
+    );
   }
 }
