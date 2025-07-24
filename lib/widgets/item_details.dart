@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:point_system/datamodel/item.dart';
 import 'package:point_system/provider/bill_items_provider.dart';
 import 'package:point_system/widgets/update_item.dart';
@@ -183,6 +184,14 @@ class _ItemDetailsState extends ConsumerState<ItemDetails> {
                                 isTapped = false;
                                 ref.read(billItemsProvider.notifier).addItem(Item.withTotalPrice(id: widget.item.id, quantityInGrams: _quantityController.text, title: widget.item.title, retailPrice: widget.item.retailPrice, selectedQuantity: _selectedQuantity, quantity: widget.item.quantity, totalPrice: _price));
                               });
+                              Fluttertoast.showToast(
+                                msg: "Item added to bill",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                backgroundColor: Colors.white70,
+                                textColor: Colors.black,
+                                fontSize: 16.0,
+                              );
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.amber,
@@ -199,8 +208,9 @@ class _ItemDetailsState extends ConsumerState<ItemDetails> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            child: const Text('Add to Bill'),
-                          ),
+                            child: const Text('Add to Bill'),),
+                           
+                          
                         ],
                       ),
                     ],

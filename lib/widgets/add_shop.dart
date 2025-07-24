@@ -5,7 +5,7 @@ import 'package:point_system/datamodel/shop.dart';
 import 'package:point_system/provider/shops_provider.dart';
 
 class AddShop extends ConsumerStatefulWidget {
-  const AddShop();
+  const AddShop({super.key});
 
   @override
   ConsumerState<AddShop> createState() => _AddShopState();
@@ -15,9 +15,9 @@ class _AddShopState extends ConsumerState<AddShop> {
   @override
   Widget build(BuildContext context) {
     bool isLoading = ref.watch(shopLoadingProvider);
-    final _shopNameController = TextEditingController();
-    final _phNoController = TextEditingController();
-    final _idController = TextEditingController();
+    final shopNameController = TextEditingController();
+    final phNoController = TextEditingController();
+    final idController = TextEditingController();
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -42,7 +42,7 @@ class _AddShopState extends ConsumerState<AddShop> {
           ),
           SizedBox(height: 30),
           TextFormField(
-            controller: _shopNameController,
+            controller: shopNameController,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               labelText: 'Shop Name',
@@ -54,7 +54,7 @@ class _AddShopState extends ConsumerState<AddShop> {
             children: [
               Expanded(
                 child: TextFormField(
-                  controller: _phNoController,
+                  controller: phNoController,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Phone Number',
@@ -65,7 +65,7 @@ class _AddShopState extends ConsumerState<AddShop> {
               SizedBox(width: 20),
               Expanded(
                 child: TextFormField(
-                  controller: _idController,
+                  controller: idController,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'ID',
@@ -81,7 +81,7 @@ class _AddShopState extends ConsumerState<AddShop> {
             height: 50,
             child: ElevatedButton(
               onPressed: isLoading ? null : () {
-               if(_shopNameController.text.isEmpty || _phNoController.text.isEmpty || _idController.text.isEmpty ) {
+               if(shopNameController.text.isEmpty || phNoController.text.isEmpty || idController.text.isEmpty ) {
                   Fluttertoast.showToast(
                     msg: "Fill all fields",
                     toastLength: Toast.LENGTH_SHORT,
@@ -89,7 +89,7 @@ class _AddShopState extends ConsumerState<AddShop> {
                   );
                   return;
                 }
-                if(_phNoController.text.length != 10) {
+                if(phNoController.text.length != 10) {
                   Fluttertoast.showToast(
                     msg: "Phone number must be 10 digits",
                     toastLength: Toast.LENGTH_SHORT,
@@ -103,9 +103,9 @@ class _AddShopState extends ConsumerState<AddShop> {
                     .read(shopsProvider.notifier)
                     .addShop(
                       Shop(
-                        name: _shopNameController.text,
-                        phno: _phNoController.text,
-                        id: _idController.text,
+                        name: shopNameController.text,
+                        phno: phNoController.text,
+                        id: idController.text,
                       ),
                     );
                   

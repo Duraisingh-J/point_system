@@ -29,70 +29,70 @@ class _SearchShopState extends ConsumerState<SearchShop> {
   @override
   Widget build(BuildContext context) {
     final shops = ref.watch(shopsProvider);
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 5, 8.0, 10),
-        child: Column(
-          children: [
-            TextFormField(
-              controller: _shopController,
-              decoration: InputDecoration(
-                prefixIcon: Icon(
-                  Icons.search,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 5, 8.0, 10),
+      child: Column(
+        children: [
+          TextFormField(
+            controller: _shopController,
+            decoration: InputDecoration(
+              prefixIcon: Icon(
+                Icons.search,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+          
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(
                   color: Theme.of(context).colorScheme.primary,
                 ),
-            
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-                hintText: 'Type to search....',
-            
-                suffixIcon: _shopController.text.isNotEmpty
-                    ? IconButton(
-                        icon: Icon(Icons.clear),
-                        onPressed: () {
-                          _shopController.clear();
-                        },
-                      )
-                    : null,
               ),
-            
+              hintText: 'Type to search....',
+          
+              suffixIcon: _shopController.text.isNotEmpty
+                  ? IconButton(
+                      icon: Icon(Icons.clear),
+                      onPressed: () {
+                        _shopController.clear();
+                      },
+                    )
+                  : null,
             ),
-           if (_shopController.text.isNotEmpty) ...[
-      if (shops.isEmpty)
-        Center(
-          child: Text(
-            'No shops found',
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onSurface,
-              fontSize: 16,
-            ),
+          
           ),
-        )
-      else
-        Flexible(
-          child: ListView.builder(
-            itemCount: shops.length,
-            itemBuilder: (context, index) {
-              final shop = shops[index];
-              return Card(
-                child: ListTile(
-                  title: Text(shop.name),
-                  onTap: () {
-                    // Handle shop selection
-                  },
-                ),
-              );
-            },
+         if (_shopController.text.isNotEmpty) ...[
+    if (shops.isEmpty)
+      Center(
+        child: Text(
+          'No shops found',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
+            fontSize: 16,
           ),
         ),
-      ],
-    
-          ],
+      )
+    else
+      Flexible(
+        child: ListView.builder(
+          itemCount: shops.length,
+          itemBuilder: (context, index) {
+            final shop = shops[index];
+            return Card(
+              child: ListTile(
+                title: Text(shop.name),
+                onTap: () {
+                  ref.read(shopProvider.notifier).setShop(shop);
+                  _shopController.clear();
+                  FocusScope.of(context).unfocus();
+                },
+              ),
+            );
+          },
         ),
+      ),
+    ],
+        
+        ],
       ),
     );
   }

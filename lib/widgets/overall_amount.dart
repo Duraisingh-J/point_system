@@ -11,16 +11,21 @@ class _OverallAmountState extends State<OverallAmount> {
   DateTime? _selectedDate = DateTime.now();
 
   void _datePicker() async {
-                final now = DateTime.now();
-                final initialDate = DateTime(2025, 1, 1);
-                final pickedDate = await showDatePicker(context: context, initialDate: now, firstDate: initialDate, lastDate: now );
-                setState(() {
-                  _selectedDate = pickedDate ?? _selectedDate;
-                });
-              }
+    final now = DateTime.now();
+    final initialDate = DateTime(2025, 1, 1);
+    final pickedDate = await showDatePicker(
+      context: context,
+      initialDate: now,
+      firstDate: initialDate,
+      lastDate: now,
+    );
+    setState(() {
+      _selectedDate = pickedDate ?? _selectedDate;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
@@ -64,11 +69,34 @@ class _OverallAmountState extends State<OverallAmount> {
                       ),
                     ),
                     Spacer(),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        'Pending : ₹ xxxx',
-                        style: TextStyle(fontSize: 15, color: Colors.red),
+                    ShaderMask(
+                      shaderCallback: (Rect bounds) {
+                        return LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [// Blue
+                            Color.fromARGB(255, 233, 30, 30),
+                            Color.fromARGB(255, 236, 64, 122),
+                          ],
+                        ).createShader(bounds);
+                      },
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          'Pending : ₹ xxxx',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white, // Required for ShaderMask
+                            shadows: [
+                              Shadow(
+                                color: Colors.purpleAccent.withOpacity(0.4),
+                                offset: Offset(0, 0),
+                                blurRadius: 12,
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -89,7 +117,11 @@ class _OverallAmountState extends State<OverallAmount> {
                 ),
                 child: Text(
                   '${_selectedDate!.day} - ${_selectedDate!.month} - ${_selectedDate!.year}',
-                  style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ),

@@ -99,3 +99,20 @@ final shopsProvider = AutoDisposeNotifierProvider<ShopsProvider, List<Shop>>(
 );
 
 final shopLoadingProvider = StateProvider.autoDispose<bool>((ref) => false);
+
+
+class ShopProvider extends StateNotifier<Shop> {
+  ShopProvider() : super(Shop(id: '', name: '', phno: ''));
+
+  void setShop(Shop shop) {
+    state = shop;
+  }
+
+  void clearShop() {
+    state = Shop(id: '', name: '', phno: '');
+  }
+}
+
+final shopProvider = StateNotifierProvider<ShopProvider, Shop>(
+  (ref) => ShopProvider(),
+);  
