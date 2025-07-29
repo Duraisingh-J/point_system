@@ -5,7 +5,25 @@ class BillItemsProvider extends StateNotifier<List<Item>> {
   BillItemsProvider() : super([]);
 
   void addItem(Item item) {
-    state = [...state, item];
+    final isExisting = state.any((i) => i.id == item.id);
+    if (!isExisting) {
+      state = [...state, item];
+    } else {
+      state = state.map((i) {
+        if (i.id == item.id) {
+          return Item.withTotalPrice(
+            id: i.id,
+            quantityInGrams: (item.selectedQuantity.name == 'g' ? item.quantityInGrams / 1000 : item.quantityInGrams) + i.quantityInGrams,
+            title: i.title,
+            retailPrice: i.retailPrice,
+            selectedQuantity: i.quantity,
+            quantity: i.quantity,
+            totalPrice: (item.selectedQuantity.name == 'g' ? item.totalPrice : item.totalPrice * 1000) + i.totalPrice,
+          );
+        }
+        return i;
+      }).toList();
+    }
   }
 
   void removeItem(Item item) {
@@ -17,5 +35,6 @@ class BillItemsProvider extends StateNotifier<List<Item>> {
   }
 }
 
-
-final billItemsProvider = StateNotifierProvider<BillItemsProvider, List<Item>>((ref) => BillItemsProvider());
+final billItemsProvider = StateNotifierProvider<BillItemsProvider, List<Item>>(
+  (ref) => BillItemsProvider(),
+);

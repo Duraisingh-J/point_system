@@ -182,7 +182,7 @@ class _ItemDetailsState extends ConsumerState<ItemDetails> {
                             onPressed: () {
                               setState(() {
                                 isTapped = false;
-                                ref.read(billItemsProvider.notifier).addItem(Item.withTotalPrice(id: widget.item.id, quantityInGrams: _quantityController.text, title: widget.item.title, retailPrice: widget.item.retailPrice, selectedQuantity: _selectedQuantity, quantity: widget.item.quantity, totalPrice: _price));
+                                ref.read(billItemsProvider.notifier).addItem(Item.withTotalPrice(id: widget.item.id, quantityInGrams: double.tryParse(_quantityController.text) ?? 0.0, title: widget.item.title, retailPrice: widget.item.retailPrice, selectedQuantity: _selectedQuantity, quantity: widget.item.quantity, totalPrice: _price));
                               });
                               Fluttertoast.showToast(
                                 msg: "Item added to bill",
