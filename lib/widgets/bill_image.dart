@@ -5,11 +5,13 @@ import 'package:point_system/datamodel/shop.dart';
 
 class BillImage extends StatelessWidget {
   final List<Item> items;
+  final String billPayment; // Default payment status
   final Shop shop;
   final GlobalKey billPdfKey;
   const BillImage({
     super.key,
     required this.items,
+    required this.billPayment,
     required this.shop,
     required this.billPdfKey,
   });
@@ -36,7 +38,7 @@ class BillImage extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 30),
-    
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,23 +59,35 @@ class BillImage extends StatelessWidget {
                     Text('+91 ${shop.phno}', style: TextStyle(fontSize: 10)),
                   ],
                 ),
-                Text(
-                  'Date: ${DateTime.now().toLocal().toString().split(' ')[0]}',
-                  style: TextStyle(fontSize: 10),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      'Date: ${DateTime.now().toLocal().toString().split(' ')[0]}',
+                      style: TextStyle(fontSize: 10),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Payment Status: $billPayment',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      // Reduced from 10
+                    ),
+                  ],
                 ),
               ],
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 6),
             Divider(color: Colors.black, thickness: 1, height: 20),
-    
-            SizedBox(height: 10),
-    
+
+            SizedBox(height: 6),
+
             // Header Row
             Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 0,
-                horizontal: 6.0,
-              ),
+              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 6.0),
               child: Row(
                 children: const [
                   Expanded(
@@ -132,9 +146,9 @@ class BillImage extends StatelessWidget {
               lineThickness: 1,
               dashLength: 4,
             ),
-    
+
             const SizedBox(height: 10),
-    
+
             ...items.map(
               (item) => Padding(
                 padding: const EdgeInsets.symmetric(
@@ -152,7 +166,7 @@ class BillImage extends StatelessWidget {
                         style: TextStyle(fontSize: 10),
                       ),
                     ),
-    
+
                     Expanded(
                       flex: 2,
                       child: Text(
@@ -181,7 +195,7 @@ class BillImage extends StatelessWidget {
                 ),
               ),
             ),
-    
+
             const SizedBox(height: 10),
             DottedLine(
               direction: Axis.horizontal,
@@ -189,7 +203,7 @@ class BillImage extends StatelessWidget {
               lineThickness: 1,
               dashLength: 4,
             ),
-    
+
             const SizedBox(height: 10),
             Row(
               children: [
@@ -205,7 +219,7 @@ class BillImage extends StatelessWidget {
                 SizedBox(width: 10),
               ],
             ),
-    
+
             const SizedBox(height: 10),
             Align(
               alignment: Alignment.centerRight,

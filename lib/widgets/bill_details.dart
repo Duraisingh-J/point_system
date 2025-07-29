@@ -25,6 +25,43 @@ class BillDetails extends ConsumerStatefulWidget {
 class _BillDetailsState extends ConsumerState<BillDetails> {
   final GlobalKey _billPdfKey = GlobalKey();
   bool _isCapturing = false;
+  String _billPayment = 'Pending';
+
+  void confirmPrint() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Print Bill'),
+        content: Text('Do you want to print the bill?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                _billPayment = 'Completed';
+              });
+              Navigator.of(ctx).pop();
+              _captureAndShare();
+            },
+            child: Text('Cash on Delivery'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                _billPayment = 'Pending';
+              });
+              Navigator.of(ctx).pop();
+              _captureAndShare();
+            },
+            child: Text('Later'),
+          ),
+        ],
+      ),
+    );
+  }
 
   Future<void> _captureAndShare() async {
     if (_isCapturing) return;
@@ -292,7 +329,6 @@ class _BillDetailsState extends ConsumerState<BillDetails> {
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 15), // Reduced from 30
-
                   // Compact customer info and date section
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -309,7 +345,10 @@ class _BillDetailsState extends ConsumerState<BillDetails> {
                             ),
                           ),
                           SizedBox(height: 2), // Reduced from 5
-                          Text(shop.name, style: TextStyle(fontSize: 10)), // Reduced from 10
+                          Text(
+                            shop.name,
+                            style: TextStyle(fontSize: 10),
+                          ), // Reduced from 10
                           SizedBox(height: 1), // Reduced from 2
                           Text(
                             '+91 ${shop.phno}',
@@ -318,14 +357,30 @@ class _BillDetailsState extends ConsumerState<BillDetails> {
                         ],
                       ),
                       Spacer(),
-                      Text(
-                        'Date: ${DateTime.now().toLocal().toString().split(' ')[0]}',
-                        style: TextStyle(fontSize: 10), // Reduced from 10
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            'Date: ${DateTime.now().toLocal().toString().split(' ')[0]}',
+                            style: TextStyle(fontSize: 10),
+                             // Reduced from 10
+                          ),
+                          SizedBox(height: 8), // Reduced from 5
+                          Text('Payment Status: $_billPayment',
+                            style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                             // Reduced from 10
+                          ),
+                        ],
                       ),
                     ],
                   ),
                   SizedBox(height: 6), // Reduced from 10
-                  Divider(color: Colors.black, thickness: 0.8, height: 10), // Reduced thickness and height
+                  Divider(
+                    color: Colors.black,
+                    thickness: 0.8,
+                    height: 10,
+                  ), // Reduced thickness and height
 
                   SizedBox(height: 6), // Reduced from 10
 
@@ -397,7 +452,6 @@ class _BillDetailsState extends ConsumerState<BillDetails> {
                       ),
 
                       const SizedBox(height: 6), // Reduced from 10
-
                       // Compact item rows
                       ...items.map(
                         (item) => Padding(
@@ -427,7 +481,9 @@ class _BillDetailsState extends ConsumerState<BillDetails> {
                                           vertical: 8,
                                         ),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8),
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
                                         ),
                                       ),
                                       child: Text('Cancel'),
@@ -447,7 +503,9 @@ class _BillDetailsState extends ConsumerState<BillDetails> {
                                           vertical: 8,
                                         ),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8),
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
                                         ),
                                       ),
                                       child: Text('Remove'),
@@ -464,14 +522,21 @@ class _BillDetailsState extends ConsumerState<BillDetails> {
                                   child: Text(
                                     item.title,
                                     softWrap: true,
-                                    style: TextStyle(fontSize: 10), // Reduced from 10
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                    ), // Reduced from 10
                                   ),
                                 ),
                                 Expanded(
                                   flex: 2,
                                   child: Text(
-                                    (item.quantity.name == 'kg' || item.quantity.name == 'g') ? '${item.quantityInGrams}${item.selectedQuantity.name}' : '${item.quantityInGrams.toInt()}${item.selectedQuantity.name}',
-                                    style: TextStyle(fontSize: 10), // Reduced from 10
+                                    (item.quantity.name == 'kg' ||
+                                            item.quantity.name == 'g')
+                                        ? '${item.quantityInGrams}${item.selectedQuantity.name}'
+                                        : '${item.quantityInGrams.toInt()}${item.selectedQuantity.name}',
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                    ), // Reduced from 10
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
@@ -479,7 +544,9 @@ class _BillDetailsState extends ConsumerState<BillDetails> {
                                   flex: 2,
                                   child: Text(
                                     '${item.retailPrice}/${item.quantity.name}',
-                                    style: TextStyle(fontSize: 10), // Reduced from 10
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                    ), // Reduced from 10
                                     textAlign: TextAlign.end,
                                   ),
                                 ),
@@ -487,7 +554,9 @@ class _BillDetailsState extends ConsumerState<BillDetails> {
                                   flex: 2,
                                   child: Text(
                                     item.totalPrice.toString(),
-                                    style: TextStyle(fontSize: 10), // Reduced from 10
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                    ), // Reduced from 10
                                     textAlign: TextAlign.end,
                                   ),
                                 ),
@@ -507,7 +576,6 @@ class _BillDetailsState extends ConsumerState<BillDetails> {
                   ),
 
                   const SizedBox(height: 6), // Reduced from 10
-                  
                   // Compact total section
                   Row(
                     children: [
@@ -531,7 +599,6 @@ class _BillDetailsState extends ConsumerState<BillDetails> {
                   ),
 
                   const SizedBox(height: 8), // Reduced from 10
-                  
                   // Compact points circle
                   Align(
                     alignment: Alignment.centerRight,
@@ -540,7 +607,10 @@ class _BillDetailsState extends ConsumerState<BillDetails> {
                       width: 50, // Reduced from 70
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(color: Colors.blueGrey, width: 1.5), // Reduced border width
+                        border: Border.all(
+                          color: Colors.blueGrey,
+                          width: 1.5,
+                        ), // Reduced border width
                       ),
                       alignment: Alignment.center,
                       child: Column(
@@ -567,7 +637,7 @@ class _BillDetailsState extends ConsumerState<BillDetails> {
                 ],
               ),
             ),
-            const SizedBox(height: 10), // Reduced from 20
+            const SizedBox(height: 5), // Reduced from 20
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 16.0,
@@ -579,16 +649,7 @@ class _BillDetailsState extends ConsumerState<BillDetails> {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.5,
                     child: ElevatedButton.icon(
-                      onPressed: () {
-                        Fluttertoast.showToast(
-                          msg: "Billing completed successfully!",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.BOTTOM,
-                          backgroundColor: Colors.white38,
-                          textColor: Colors.black,
-                          fontSize: 16.0,
-                        );
-                      },
+                      onPressed: confirmPrint,
                       icon: Icon(Icons.print, size: 30),
                       label: Text(
                         'Print',
@@ -597,6 +658,7 @@ class _BillDetailsState extends ConsumerState<BillDetails> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(
                           context,
+                          // ignore: deprecated_member_use
                         ).colorScheme.primary.withOpacity(0.8),
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(
@@ -630,6 +692,7 @@ class _BillDetailsState extends ConsumerState<BillDetails> {
               top: 0,
               child: BillImage(
                 billPdfKey: _billPdfKey,
+                billPayment: _billPayment,
                 items: items,
                 shop: shop,
               ),
@@ -638,4 +701,5 @@ class _BillDetailsState extends ConsumerState<BillDetails> {
         ),
       ],
     );
-  }}
+  }
+}
