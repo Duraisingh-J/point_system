@@ -90,6 +90,7 @@ class _OverallAmountState extends State<OverallAmount> {
                             color: Colors.white, // Required for ShaderMask
                             shadows: [
                               Shadow(
+                                // ignore: deprecated_member_use
                                 color: Colors.purpleAccent.withOpacity(0.4),
                                 offset: Offset(0, 0),
                                 blurRadius: 12,

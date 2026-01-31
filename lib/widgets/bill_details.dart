@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:dotted_line/dotted_line.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,8 +26,7 @@ class _BillDetailsState extends ConsumerState<BillDetails> {
   final GlobalKey _billPdfKey = GlobalKey();
   bool _isCapturing = false;
   String _billPayment = 'Pending';
-
-  void confirmPrint() {
+void confirmPrint() {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -89,7 +88,10 @@ class _BillDetailsState extends ConsumerState<BillDetails> {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
       );
-      print('Capture error: $e');
+      if (kDebugMode) {
+    
+    print('Capture error: $e');
+      }
     } finally {
       setState(() => _isCapturing = false);
     }
@@ -145,7 +147,8 @@ class _BillDetailsState extends ConsumerState<BillDetails> {
       await WidgetsBinding.instance.endOfFrame;
 
       attempts++;
-      print(
+  
+  print(
         'Waiting for painting to complete, attempt: $attempts, needsPaint: ${boundary.debugNeedsPaint}',
       );
     }
@@ -162,7 +165,7 @@ class _BillDetailsState extends ConsumerState<BillDetails> {
       }
     }
 
-    print(
+  print(
       'Widget is ready for capture, needsPaint: ${boundary.debugNeedsPaint}',
     );
   }
@@ -188,8 +191,8 @@ class _BillDetailsState extends ConsumerState<BillDetails> {
     final double scaleFactor = usableWidth / imageWidth;
     final double scaledHeight = imageHeight * scaleFactor;
 
-    print('Image dimensions: ${imageWidth}x$imageHeight');
-    print('Scaled height: $scaledHeight, Page height: $usableHeight');
+  print('Image dimensions: ${imageWidth}x$imageHeight');
+  print('Scaled height: $scaledHeight, Page height: $usableHeight');
 
     final image = pw.MemoryImage(imageBytes);
 
@@ -213,7 +216,8 @@ class _BillDetailsState extends ConsumerState<BillDetails> {
     } else {
       // Split image into multiple pages using a simpler approach
       final int numberOfPages = (scaledHeight / usableHeight).ceil();
-      print('Creating $numberOfPages pages');
+  
+  print('Creating $numberOfPages pages');
 
       for (int pageIndex = 0; pageIndex < numberOfPages; pageIndex++) {
         // Calculate what portion of the image to show on this page
@@ -224,7 +228,8 @@ class _BillDetailsState extends ConsumerState<BillDetails> {
             : pageEndY;
         final double thisPageHeight = actualEndY - pageStartY;
 
-        print(
+    
+    print(
           'Page ${pageIndex + 1}: startY=$pageStartY, endY=$actualEndY, height=$thisPageHeight',
         );
 
@@ -285,6 +290,7 @@ class _BillDetailsState extends ConsumerState<BillDetails> {
   }
 
   Future<void> _sharePdf(File file) async {
+    // ignore: deprecated_member_use
     await Share.shareXFiles(
       [XFile(file.path)],
       text: 'Here is your bill',
